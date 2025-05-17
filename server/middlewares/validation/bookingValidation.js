@@ -1,7 +1,12 @@
 const {check} = require('express-validator');
+const Event = require('../../models/Event');
 
-exports.cardDetailsValidationRules = [
-    check('userId').trim().notEmpty().isMongoId().withMessage('Invalid userId.'),
-    check('eventId').trim().notEmpty().isMongoId().withMessage('Invalid eventId.'),
+exports.bookingValidationRules = [
+    check('id').trim().notEmpty().isMongoId().withMessage('Invalid eventId.').custom(async (val) => {
+        const event = await Event.findById(val);
+        if (!event) {
+            throw new Error('Event not found');
+        }
+    }),
 ]
 

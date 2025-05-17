@@ -135,11 +135,18 @@ exports.book = async (req, res) => {
     const userId = req.user.id;
     const { id } = req.params;
     const booking = await Booking.findOne({ userId, cardId: id });
-    const newDetails = new Booking({ userId, cardId: id });
-    await newDetails.save();
-    const card = await Event.findById(id);
-    card.counter += 1;
-    await card.save();
+    if (!booking) {
+      const newBooking = new Booking({ userId, eventId: id });
+      await newBooking.save();
+    }
+
+    booking.numberOfTickets += 1;
+    await booking.save();
+
+
+    const event = await Event.findById(id);
+    event.counter += 1;
+    await event.save();
     res.status(201).json({
       message: "Details added successfully",
       data: newDetails,

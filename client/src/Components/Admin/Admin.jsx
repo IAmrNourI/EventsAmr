@@ -3,6 +3,8 @@ import { getCardApi } from '../../Network/card.api';
 import { LanguageContext } from '../../Context/Language';
 import { useNavigate } from 'react-router-dom';
 import { deleteEventApi } from '../../Network/admin.api';
+import toast from 'react-hot-toast';
+
 
 export default function Admin() {
 const [getProducts, setgetProducts] = useState([]);
@@ -27,6 +29,7 @@ async function getCard() {
     })
     .catch((res) => {
         toast.error(res.response.data.message)
+        
     })
 }
 

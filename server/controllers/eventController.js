@@ -2,6 +2,7 @@ const Event = require("../models/Event");
 const deleteImage = require("../utils/deleteImage");
 const Booking = require("../models/Booking");
 exports.getEvents = async (req, res) => {
+
   try {
     const events = await Event.find().select("-__v -createdAt -updatedAt");
 

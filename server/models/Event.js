@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const cardSchema = new mongoose.Schema({
+const eventSchema = new mongoose.Schema({
     title: {
         type: String,
         required: [true, "Title is required"]
@@ -54,5 +54,5 @@ const cardSchema = new mongoose.Schema({
     },
 })
 
-const Card = mongoose.model("Card", cardSchema);
-module.exports = Card;
+const Event = mongoose.model("Event", eventSchema);
+module.exports = Event;

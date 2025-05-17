@@ -1,20 +1,21 @@
 const Event = require("../models/Event");
 const deleteImage = require("../utils/deleteImage");
 const Booking = require("../models/Booking");
-exports.getCards = async (req, res) => {
+exports.getEvents = async (req, res) => {
+
   try {
-    const events = await Event.find().select('-__v -createdAt -updatedAt');
+    const events = await Event.find().select("-__v -createdAt -updatedAt");
 
     const baseUrl = `${req.protocol}://${req.get("host")}`;
 
-    const eventsWithUrl = events.map((card) => {
-      const obj = card.toObject();
-      obj.imageUrl = `${baseUrl}/uploads/${card.image}`;
+    const eventsWithUrl = events.map((event) => {
+      const obj = event.toObject();
+      obj.imageUrl = `${baseUrl}/uploads/${event.image}`;
       return obj;
     });
 
     res.status(200).json({
-      message: "Cards fetched successfully",
+      message: "Events fetched successfully",
       data: eventsWithUrl,
       error: false,
     });
@@ -25,18 +26,21 @@ exports.getCards = async (req, res) => {
 
 exports.limitedEvents = async (req, res) => {
   try {
-    const events = await Event.find({ type : "portfolio" }).sort({ createdAt: 1 }).limit(6).select('-__v -createdAt -updatedAt');
+    const events = await Event.find({ type: "portfolio" })
+      .sort({ createdAt: 1 })
+      .limit(6)
+      .select("-__v -createdAt -updatedAt");
 
     const baseUrl = `${req.protocol}://${req.get("host")}`;
 
-    const eventsWithUrl = events.map((card) => {
-      const obj = card.toObject();
-      obj.imageUrl = `${baseUrl}/uploads/${card.image}`;
+    const eventsWithUrl = events.map((event) => {
+      const obj = event.toObject();
+      obj.imageUrl = `${baseUrl}/uploads/${event.image}`;
       return obj;
     });
 
     res.status(200).json({
-      message: "Cards fetched successfully",
+      message: "Events fetched successfully",
       data: eventsWithUrl,
       error: false,
     });
@@ -47,12 +51,32 @@ exports.limitedEvents = async (req, res) => {
 
 exports.addEvent = async (req, res) => {
   try {
-    const { title, description, image, titleAr, descriptionAr, date, category, price, venue } = req.body;
-    const newCard = new Card({ title, description, image, titleAr, descriptionAr, date, category, price, venue });
-    await newCard.save();
+    const {
+      title,
+      description,
+      image,
+      titleAr,
+      descriptionAr,
+      date,
+      category,
+      price,
+      venue,
+    } = req.body;
+    const newEvent = new Event({
+      title,
+      description,
+      image,
+      titleAr,
+      descriptionAr,
+      date,
+      category,
+      price,
+      venue,
+    });
+    await newEvent.save();
     res.status(201).json({
-      message: "Card added successfully",
-      data: newCard,
+      message: "Event added successfully",
+      data: newEvent,
       error: false,
     });
   } catch (error) {
@@ -77,11 +101,11 @@ exports.updateEvent = async (req, res) => {
 
     const event = await Event.findById(id);
     if (!event) {
-      return res.status(404).json({ message: "Card not found", error: true });
+      return res.status(404).json({ message: "Event not found", error: true });
     }
 
     if (image && event.image && event.image !== image) {
-      await deleteImage(event.image); 
+      await deleteImage(event.image);
     }
 
     Object.assign(event, {
@@ -96,16 +120,14 @@ exports.updateEvent = async (req, res) => {
       venue,
     });
 
-    await card.save();
+    await event.save();
 
     res.status(200).json({
-      message: "Card updated successfully",
-      data: card,
+      message: "Event updated successfully",
+      data: event,
       error: false,
     });
-
   } catch (error) {
-    console.error("Update card error:", error);
     res.status(500).json({ message: "Internal Server Error", error: true });
   }
 };
@@ -113,20 +135,20 @@ exports.updateEvent = async (req, res) => {
 exports.deleteEvent = async (req, res) => {
   try {
     const { id } = req.params;
-    const card = await Event.findById(id);
-    if (!card) {
-      return res.status(404).json({ message: "Card not found", error: true });
+    const event = await Event.findById(id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found", error: true });
     }
 
-    await Card.findByIdAndDelete(id);
-    deleteImage(card.image);
+    await Event.findByIdAndDelete(id);
+    deleteImage(event.image);
 
-    res.status(200).json({
-      message: "Card deleted successfully",
+    return res.status(200).json({
+      message: "Event deleted successfully",
       error: false,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message, error: true });
+    return res.status(500).json({ message: error.message, error: true });
   }
 };
 
@@ -134,22 +156,30 @@ exports.book = async (req, res) => {
   try {
     const userId = req.user.id;
     const { id } = req.params;
-    const booking = await Booking.findOne({ userId, cardId: id });
+    const booking = await Booking.findOne({ userId, eventId: id });
     if (!booking) {
       const newBooking = new Booking({ userId, eventId: id });
       await newBooking.save();
+      const event = await Event.findById(id);
+      event.counter += 1;
+
+      await event.save();
+      return res.status(201).json({
+        message: "Booking added successfully",
+        data: newBooking,
+        error: false,
+      });
     }
 
     booking.numberOfTickets += 1;
     await booking.save();
 
-
     const event = await Event.findById(id);
     event.counter += 1;
     await event.save();
-    res.status(201).json({
-      message: "Details added successfully",
-      data: newDetails,
+    return res.status(201).json({
+      message: "Booking added successfully",
+      data: booking,
       error: false,
     });
   } catch (error) {
@@ -162,12 +192,10 @@ exports.uploadFile = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
-    return res
-      .status(200)
-      .json({
-        message: "File Successfully Uploaded",
-        image: req.file.filename,
-      }); 
+    return res.status(200).json({
+      message: "File Successfully Uploaded",
+      image: req.file.filename,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -176,27 +204,29 @@ exports.uploadFile = async (req, res) => {
 exports.getMyEvents = async (req, res) => {
   try {
     const userId = req.user.id;
-    const details = await Booking.find({ userId }).select('-__v -createdAt -updatedAt');
+    const bookings = await Booking.find({ userId }).select(
+      "-__v -createdAt -updatedAt"
+    );
     res.status(200).json({
-      message: "Details fetched successfully",
-      data: details,
+      message: "Booking fetched successfully",
+      data: bookings,
       error: false,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message, error: true });
+    return res.status(500).json({ message: error.message, error: true });
   }
-}
+};
 
 exports.getEventById = async (req, res) => {
   try {
     const { id } = req.params;
-    const card = await Event.findById(id).select('-__v -createdAt -updatedAt');
+    const event = await Event.findById(id).select("-__v -createdAt -updatedAt");
     res.status(200).json({
-      message: "Card fetched successfully",
-      data: card,
+      message: "Event fetched successfully",
+      data: event,
       error: false,
     });
   } catch (error) {
     res.status(500).json({ message: error.message, error: true });
   }
-}
+};

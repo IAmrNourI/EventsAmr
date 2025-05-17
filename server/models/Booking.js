@@ -12,6 +12,7 @@ const bookingSchema = new mongoose.Schema({
     },
     numberOfTickets: {
         type: Number,
+        default: 1,
         required: true
     }
 

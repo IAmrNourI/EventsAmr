@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const cardController = require("../controllers/eventController");
+const eventController = require("../controllers/eventController");
 const { isAuth } = require("../middlewares/auth/isAuth");
 const upload = require("../middlewares/multerMiddleware");
 
@@ -12,11 +12,16 @@ const {
 } = require("../middlewares/validation/eventValidation");
 
 const {
+  bookingValidationRules,
+} = require("../middlewares/validation/bookingValidation");
+
+
+const {
   validationResults,
 } = require("../middlewares/validation/validationResult");
 
-router.get("/", cardController.getCards);
-router.get("/limited-events", cardController.limitedEvents);
+router.get("/", eventController.getEvents);
+router.get("/limited-events", eventController.limitedEvents);
 
 router.post(
   "/",
@@ -24,7 +29,7 @@ router.post(
   isRole("admin"),
   eventValidationRules,
   validationResults,
-  cardController.addEvent
+  eventController.addEvent
 );
 
 router.put(
@@ -33,22 +38,22 @@ router.put(
   isRole("admin"),
   updateEventValidationRule,
   validationResults,
-  cardController.updateEvent
+  eventController.updateEvent
 );
 
 router.post(
   "/upload",
   upload.single("image"),
   isRole("admin"),
-  cardController.uploadFile
+  eventController.uploadFile
 );
 
-router.post("/book/:id", isAuth, cardController.book);
+router.post("/book/:id", isAuth, bookingValidationRules, validationResults, eventController.book);
 
-router.delete("/:id", isAuth, isRole("admin"), cardController.deleteEvent);
+router.delete("/:id", isAuth, isRole("admin"), eventController.deleteEvent);
 
-router.get("/my-events", isAuth, cardController.getMyEvents);
+router.get("/my-events", isAuth, eventController.getMyEvents);
 
-router.get("/:id", cardController.getEventById);
+router.get("/:id", eventController.getEventById);
 
 module.exports = router;

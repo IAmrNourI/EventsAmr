@@ -31,7 +31,7 @@ async function getCard() {
   }
 
 async function applyNow(id) {
-  console.log(id)
+  console.log("ID :", id)
   try {
     const res = await applyApi(id);
     toast.success("Event Booked Successfully");
@@ -68,11 +68,11 @@ async function applyNow(id) {
     <div className="row">
       {getProducts.map((card) => (
         <div key={card._id} className="col-md-4"> 
-            <div class="center">
-              <div class="article-card">
-                <div class="content">
-                  <p class="date">{formatDate(card.date)}</p>
-                  <p class="title">{card.title}</p>
+            <div className="center">
+              <div className="article-card">
+                <div className="content">
+                  <p className="date">{formatDate(card.date)}</p>
+                  <p className="title">{card.title}</p>
 
           <div className="btns-hero d-flex">
 

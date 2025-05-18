@@ -21,14 +21,15 @@ return (
               <div className="col-lg-4 col-md-6">
                 <div className="footer-item">
                     {/* <img src={footerLogo} alt="jabaness food" className="mb-4"/> */}
-                    <a aria-label='logo' className="navbar-brand logo text-white " href="#">
-                      Events
-                    </a>
-                    
-                    <p className='text-footer-color text-white'>In tje new era of technology we look a in the future with
-                      certainty and pride to for our company
-                    </p>
-                    
+                  <a aria-label='logo' className="navbar-brand logo text-white" href="#">
+                    {language === "en" ? "Events" : "فعاليات"}
+                  </a>
+                                      
+                  <p className='text-footer-color text-white'>
+                  {language === "en" 
+                    ? "Discover the best events happening around you and never miss out on unforgettable experiences."
+                    : "اكتشف أفضل الفعاليات التي تحدث من حولك ولا تفوت التجارب التي لا تُنسى."}
+                  </p>
 
                   <div className="social d-flex">
                     <a aria-label='twitter' href="#">
@@ -49,27 +50,27 @@ return (
 
               <div className="col-lg-2 col-md-6">
                 <ul className='footer-list p-0'>
-                  <li><Link aria-label='home' className='footer-link' to="/">Home</Link></li> 
-                  <li><Link aria-label='home' className='footer-link' to="/allevents">All-Events</Link></li> 
-                  <li><Link aria-label='home' className='footer-link' to="/myevents">MyEvents</Link></li> 
+                  <li><Link aria-label='home' className='footer-link' to="/">{language === "en" ? "Home": "الرئيسيه"}</Link></li> 
+                  <li><Link aria-label='home' className='footer-link' to="/allevents">{language === "en" ? "Home": "جميع الفاعليات"}</Link></li> 
+                  <li><Link aria-label='home' className='footer-link' to="/myevents">{language === "en" ? "Home": "فاعلياتي"}</Link></li> 
                 </ul>
               </div>
 
               <div className="col-lg-2 col-md-6">
                 <ul className='footer-list p-0 text-white'>
-                  <li className=' mb-3 fw-500 '>Utility Pages</li>
-                  <li >Start Hero</li>
-                  <li>Styleguide</li>
-                  <li>Pasword Protected</li>
-                  <li>404 Not Found</li>
-                  <li>Licenses</li>
-                  <li>Changeiog</li>
+                  <li>{language === "en" ? "Start Hero" : "ابدأ البطل"}</li>
+                  <li>{language === "en" ? "Styleguide" : "دليل الأسلوب"}</li>
+                  <li>{language === "en" ? "Pasword Protected" : "محمية بكلمة المرور"}</li>
+                  <li>{language === "en" ? "404 Not Found" : "٤٠٤ غير موجود"}</li>
+                  <li>{language === "en" ? "Licenses" : "الرخص"}</li>
+                  <li>{language === "en" ? "Changeiog" : "تغيير"}</li>
+
                 </ul>
               </div>
 
 
               <div className="col-lg-4 col-md-6">
-                <p className='text-white fw-500 p-f'>Follow Us On Instagram</p>
+                <p className='text-white fw-500 p-f'>{language === "en" ? "Follow Us On Instagram": "تابعنا علي الانستجرام"}</p>
                 <div className='footer-imgs'>
                   <img loading='lazy' className='w-50' src={event1} alt="" />
                   <img loading='lazy' className='w-50' src={event2} alt="" />

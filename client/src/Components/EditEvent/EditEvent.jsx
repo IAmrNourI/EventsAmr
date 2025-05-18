@@ -82,7 +82,7 @@ export default function EditEvent() {
   }
 
   return (
-    <section className="d-flex justify-content-center align-items-center mt-5" style={{ minHeight: "100vh" }}>
+    <section className="d-flex justify-content-center align-items-center pt-120" style={{ minHeight: "100vh" }}>
       <form onSubmit={handleSubmit} className="p-4 bg-white shadow rounded w-100" style={{ maxWidth: "550px" }}>
         <h3 className="mb-4 text-center">Edit Event</h3>
 

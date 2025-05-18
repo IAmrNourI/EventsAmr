@@ -51,7 +51,6 @@ export default function Register() {
   return (
     <div className="container d-flex justify-content-center align-items-center min-vh-100">
       <div className="card shadow p-4 w-100" style={{ maxWidth: "500px" }}>
-        <h3 className="text-center text-success mb-4">Welcome to Talky Chat App!</h3>
         <form onSubmit={handleSubmit} noValidate>
 
 

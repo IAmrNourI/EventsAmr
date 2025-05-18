@@ -1,11 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { getBookingId, getUserBookingAPi } from "../../Network/card.api";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { applyApi, getBookingId, getUserBookingAPi } from "../../Network/card.api";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { LanguageContext } from "../../Context/Language";
+import { isLoggedIn } from "../../Network/auth.api";
 
 export default function MyEvents() {
   const [bookedCardsDetails, setBookedCardsDetails] = useState([]);
   const [bookedCards, setbookedCards] = useState([])
+  const {language, setLanguage} = useContext(LanguageContext)
+
+      const navigate = useNavigate()
+     
+  
+      async function isLogged(){
+          await isLoggedIn()
+          .then((res) => {
+            console.log("llogin???",res)
+          })
+          .catch((res) => {
+            console.log("llogin???",res)
+              navigate("/auth/login");
+          })
+      }
+
+
+async function applyNow(id) {
+  try {
+    const res = await applyApi(id);
+    toast.success("Event Booked Successfully");
+
+  } catch (error) {
+    toast.error("Booking failed");
+    console.log(error)
+  }
+}
 
   async function getUserBooking() {
     try {
@@ -57,6 +86,7 @@ export default function MyEvents() {
 
   useEffect(() => {
     getUserBooking();
+    isLogged()
   }, []);
 
   return (
@@ -66,10 +96,12 @@ export default function MyEvents() {
           {bookedCardsDetails.map((card) => (
             <div key={card._id} className="col-md-4">
               <div class="center">
-                <div class="article-card">
+                <div class="article-card">                
+                  <Link to={`/card-details/${card._id}`}>
+                
                   <div class="content">
                     <p class="date">{formatDate(card.date)}</p>
-                    <p class="title">{card.title}</p>
+                    <p class="title">{language === "en" ? card.title : card.titleAr}</p>
 
                     <div className="btns-hero d-flex">
                       <Link
@@ -82,8 +114,8 @@ export default function MyEvents() {
                           // disabled={true}
                         >
                           {bookedCardsDetails.includes(card._id)
-                            ? "Booked"
-                            : "Book now"}
+                  ? (language === "en" ? "Booked" : "تم الحجز")
+                  : (language === "en" ? "Book now" : "احجز الآن")}
                           <span></span>
                           <span></span>
                         </button>
@@ -91,10 +123,11 @@ export default function MyEvents() {
                     </div>
                   </div>
 
-                  <img
-                    src="https://images.unsplash.com/photo-1482877346909-048fb6477632?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=958&q=80"
-                    alt="article-cover"
-                  />
+                <img src={card.imageUrl} alt="article-cover" />
+                                  
+                                  
+                    </Link>
+                  
                 </div>
               </div>
             </div>

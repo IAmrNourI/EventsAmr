@@ -10,7 +10,14 @@ const LoginApi = async (data) => {
     });
 }
 
+const isLoggedIn = async () => {
+    const token = localStorage.getItem('token'); 
+    return await axiosInstance.get('/api/auth/is-logged-in', {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    });
+}
 
 
-
-export { registerApi, LoginApi }
+export { registerApi, LoginApi, isLoggedIn }

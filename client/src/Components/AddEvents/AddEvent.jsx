@@ -65,11 +65,12 @@ export default function AddProduct() {
   }
 
   return (
-    <section className="login-email">
+    <section className="login-email pt-120">
       <div className="bg-register d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
         <section className="register mt-5 w-100" style={{ maxWidth: "500px" }}>
           <form onSubmit={(e) => { e.preventDefault(); addProduct(); }}>
             <div className="register-container p-4 shadow rounded bg-white">
+            <h3 className="mb-4 text-center">Add Event</h3>
 
               {/* Image Upload */}
               <div className="mb-3 d-flex align-items-center position-relative">

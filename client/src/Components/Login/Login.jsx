@@ -41,7 +41,6 @@ export default function Login() {
   return (
     <div className="container d-flex justify-content-center align-items-center min-vh-100">
       <div className="card shadow p-4 w-100" style={{ maxWidth: "500px" }}>
-        <h3 className="text-center text-primary mb-4">Welcome to Amit Chat App!</h3>
         <form onSubmit={formik.handleSubmit} noValidate>
           <div className="mb-3">
             <label htmlFor="email" className="form-label">

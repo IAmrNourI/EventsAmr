@@ -30,7 +30,7 @@ function App() {
       { path: "myevents", element: <MyEvents /> },
       { path: "card", element: <Card /> },
       { path: "allevents", element: <AllEvents /> },
-      { path: "card-details", element: <CardDetails /> },
+      { path: "card-details/:id", element: <CardDetails /> },      
       { path: "admin", element: <Admin/> },
       { path: "addevent", element: <AddEvent /> },
       { path: "editevent", element: <EditEvent /> },

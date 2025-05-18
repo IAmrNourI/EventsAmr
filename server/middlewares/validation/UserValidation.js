@@ -2,7 +2,6 @@ const { check, body } = require("express-validator");
 const User = require("../../models/User");
 
 exports.userValidationRules = [
-  check("name").trim().notEmpty().withMessage("Nameeee is required"),
   check("email").isEmail().withMessage("Invalid email format").custom(async (val) => {
     const user = await User.findOne({ email: val });
     if (user) {

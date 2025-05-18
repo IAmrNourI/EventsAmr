@@ -2,7 +2,7 @@ import { axiosInstance } from "./index";
 
 
 const getCardApi = async(data) => {
-    return await axiosInstance.get("/api/event", data)
+    return await axiosInstance.get("/api/event/limited-events", data)
 }
 
 const getAllEvents = async(data) => {
@@ -18,7 +18,8 @@ const applyApi = async (id) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
+    {withCredentials: true}
   );
 };
 

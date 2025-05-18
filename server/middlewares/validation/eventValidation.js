@@ -30,11 +30,11 @@ exports.eventValidationRules = [
       "Description is required and must be at least 10 characters long."
     ),
   check("image").trim().notEmpty().withMessage("Image is required."),
-  check("date_time")
+  check("date")
     .trim()
     .notEmpty()
     .isISO8601()
-    .withMessage({ message: "date_time must be a date and not Empty" })
+    .withMessage({ message: "date must be a date and not Empty" })
     .toDate()
     .custom((val) => {
       const dateNow = new Date(Date.now() + 2 * 60 * 60 * 1000);
@@ -77,12 +77,14 @@ exports.eventValidationRules = [
 exports.updateEventValidationRule = [
   check("title")
     .trim()
+
     .notEmpty()
     .matches(/^[a-zA-Z0-9\s]+$/)
     .isLength({ min: 3 })
     .withMessage("Title can't be empty."),
   check("description")
     .trim()
+
     .notEmpty()
     .matches(/^[a-zA-Z0-9\s]+$/)
     .isLength({ min: 10 })
@@ -90,7 +92,6 @@ exports.updateEventValidationRule = [
       "Description is required and must be at least 10 characters long."
     ),
   check("titleAr")
-    .optional()
     .trim()
     .matches(/^[\u0621-\u064A0-9\s]+$/)
     .isLength({ min: 3 })
@@ -104,12 +105,12 @@ exports.updateEventValidationRule = [
     .withMessage(
       "Description is required and must be at least 10 characters long."
     ),
-  check("image").optional().trim().notEmpty().withMessage("Image is required."),
-  check("date_time")
+  check("image").trim().notEmpty().withMessage("Image is required."),
+  check("date")
     .trim()
     .notEmpty()
     .isISO8601()
-    .withMessage({ message: "date_time must be a date and not Empty" })
+    .withMessage({ message: "date must be a date and not Empty" })
     .toDate()
     .custom((val) => {
       const dateNow = new Date(Date.now() + 2 * 60 * 60 * 1000);
@@ -118,7 +119,7 @@ exports.updateEventValidationRule = [
       );
 
       if (val < dateNow) {
-        throw new Error("date_time must be in the future.");
+        throw new Error("date must be in the future.");
       }
 
       if (val > dateAfter30Days) {
@@ -127,7 +128,6 @@ exports.updateEventValidationRule = [
       return true;
     }),
   check("category")
-    .optional()
     .trim()
     .notEmpty()
     .isIn([
@@ -139,13 +139,11 @@ exports.updateEventValidationRule = [
     ])
     .withMessage("Category is required."),
   check("price")
-    .optional()
     .trim()
     .notEmpty()
     .isNumeric()
     .withMessage("Price is required."),
   check("venue")
-    .optional()
     .trim()
     .notEmpty()
     .isString({ min: 20 })

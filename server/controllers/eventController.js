@@ -26,7 +26,7 @@ exports.getEvents = async (req, res) => {
 
 exports.limitedEvents = async (req, res) => {
   try {
-    const events = await Event.find({ type: "portfolio" })
+    const events = await Event.find({})
       .sort({ createdAt: 1 })
       .limit(6)
       .select("-__v -createdAt -updatedAt");

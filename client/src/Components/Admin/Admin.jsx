@@ -4,12 +4,26 @@ import { LanguageContext } from '../../Context/Language';
 import { useNavigate } from 'react-router-dom';
 import { deleteEventApi } from '../../Network/admin.api';
 import toast from 'react-hot-toast';
+import { isLoggedIn } from '../../Network/auth.api';
 
 
 export default function Admin() {
 const [getProducts, setgetProducts] = useState([]);
 const {language, setLanguage} = useContext(LanguageContext)
 const navigate = useNavigate()
+
+     
+  
+      async function isLogged(){
+          await isLoggedIn()
+          .then((res) => {
+            console.log("llogin???",res)
+          })
+          .catch((res) => {
+            console.log("llogin???",res)
+              navigate("/auth/login");
+          })
+      }
 
 async function getCard() {
     await getCardApi("product")
@@ -35,6 +49,7 @@ async function getCard() {
 
     useEffect(() => {
       getCard();
+      isLogged();
     }, []);
 
   return (

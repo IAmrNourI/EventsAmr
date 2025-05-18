@@ -221,9 +221,14 @@ exports.getEventById = async (req, res) => {
   try {
     const { id } = req.params;
     const event = await Event.findById(id).select("-__v -createdAt -updatedAt");
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+
+      const obj = event.toObject();
+      obj.imageUrl = `${baseUrl}/uploads/${event.image}`;
+
     res.status(200).json({
       message: "Event fetched successfully",
-      data: event,
+      data: obj,
       error: false,
     });
   } catch (error) {

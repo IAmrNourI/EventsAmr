@@ -43,8 +43,9 @@ router.put(
 
 router.post(
   "/upload",
-  upload.single("image"),
+  isAuth,
   isRole("admin"),
+  upload.single("image"),
   eventController.uploadFile
 );
 

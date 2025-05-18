@@ -42,7 +42,7 @@ async function getCard() {
         <div className="container">
             <div className="row">
                 <h2 className='my-2 text-center'></h2>
-                <div className="text-start mt-4">
+                <div className="text-start pt-120">
                     <button onClick={() => navigate("/addevent", {state: {category:"product"}})} className="btn btn-warning btn-admin">{language == "en" ? "Add Event" : "اضافه منتج"}</button>
                 </div>
                 {getProducts?.map((product) => (
@@ -52,8 +52,8 @@ async function getCard() {
                             <img src={product.imageUrl} className="product-img card-img-top" loading="lazy" />
                         </div>
                         <div className="card-body">
-                            <h5 className="card-title text-center">{product.title}</h5>
-                            <p className="text-black">{product.description}</p>
+                            <h5 className="card-title text-center">{language === "en" ? product.title : product.titleAr}</h5>
+                            <p className="text-black">{language === "en" ? product.description : product.descriptionAr}</p>
                             <p className="text-black">{product.price}</p>
                             <p className="text-black">{product.venue}</p>
                             <p className="text-black">{product.category}</p>
